@@ -1,47 +1,19 @@
 #include<iostream>
 #include<vector>
-
+#include "helper.cpp"
 using namespace std;
 
-void VSstopFunc()
-{
-	int a = 0;
-	cin >> a;
-}
 
-class State
-{
-public:
-	int x;
-	int y;
-	double utility;
-
-	State(int col, int row, double utilityVal)
-	{
-		x = col;
-		y = row;
-		utility = utilityVal;
-	}
-
-	void setU(double val)
-	{
-		utility = val;
-	}
-
-	double getU()
-	{
-		return utility;
-	}
-
-};
 
 int main(void)
 {
-
-	//map of state (x, y) -->U
-	cout << "asd" << endl;
-	//1 value iteration to build the map with Utility
-	//2 given the R(s) and y, calculate the policy
+    StatesMap states = StatesMap(4, 3);
+    states.setWall(2, 2);
+    states.setTerminal(4, 2, -1);
+    states.setTerminal(4, 3, 1);
+    states.printStates();
+    
+    
 
 
 	return 0;
