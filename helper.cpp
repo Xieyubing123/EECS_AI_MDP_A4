@@ -37,6 +37,11 @@ double findBestExp(StatesMap &states, int col, int row, Action &bestAct)
     //for each action
     for (int act = (int)UP; act <= (int)RIGHT; ++act)
     {
+        if (col == 3 && row == 2 && states.getUtility(3, 2) < -3.0389)
+        {
+            //states.printStates();
+            //cout << states.getUtility(3, 2) << endl;
+        }
         double actExpect = states.getResultStatesExpect(col,
                                                         row,
                                                         (Action)act,
@@ -45,6 +50,7 @@ double findBestExp(StatesMap &states, int col, int row, Action &bestAct)
                                                         0.1);
         actExpects.push_back(actExpect);
         actionMap[actExpect] = act;
+        //cout << "(" << col << "," << row << "," << act << "," << actExpect << ")" << endl;
     }
     
     sort(actExpects.begin(), actExpects.end());
@@ -127,7 +133,8 @@ void binarySearch(double minRs, double maxRs, int col,
                   map<string, int>& policyCount,
                   map<double, string>& RsPolicyMap)
 {
-    if (maxRs - minRs < 0.0001)
+    double err = 0.0000001;
+    if (maxRs - minRs < err)
     {
         return;
     }
@@ -149,19 +156,23 @@ void binarySearch(double minRs, double maxRs, int col,
 
     if (minPolStr == maxPolStr)
     {
-        if (policyCount[minPolStr] < 1)
+        if (policyCount[maxPolStr] < 1)
         {
-            RsList.push_back(minRs);
-            policyCount[minPolStr]++;
+            RsList.push_back(maxRs);
+            policyCount[maxPolStr]++;
         }
+        
+        
     }
     else
     {
+        /*
         if (policyCount[minPolStr] < 1)
         {
             RsList.push_back(minRs);
             policyCount[minPolStr]++;
         }
+        */
         
         if (policyCount[maxPolStr] < 1)
         {
@@ -169,15 +180,21 @@ void binarySearch(double minRs, double maxRs, int col,
             policyCount[maxPolStr]++;
         }
         
-        binarySearch(minRs, (maxRs + minRs)/2.0000000 , col,
+        
+        
+        
+        
+        binarySearch((maxRs + minRs)/2.0000000, maxRs - err, col,
                      row, minErr, discountFactor,
                      RsList,policyCount,RsPolicyMap);
         
-        binarySearch((maxRs + minRs)/2.0000000, maxRs, col,
+        binarySearch(minRs + err, (maxRs + minRs)/2.0000000 , col,
                      row, minErr, discountFactor,
                      RsList,policyCount,RsPolicyMap);
+        
+
     }
     
-    cout << RsList.size() << endl;
+    //cout << RsList.size() << endl;
 }
 

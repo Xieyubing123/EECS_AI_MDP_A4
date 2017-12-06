@@ -10,7 +10,7 @@ int main(void)
 {
     double minErr = 0.0000001;
     double discountFactor = 1;
-    double Rs = -0.04;
+    double Rs = -0.040000;
     int col = 4;
     int row = 3;
     map<string, int> policyMap;
@@ -18,27 +18,27 @@ int main(void)
     map<string, int> policyCount;
     map<double, string> RsPolicyMap;
     
-    //dynamicProgrammingMDPsolver(Rs, col, row, minErr, discountFactor);
-    binarySearch(-2.0000000, 0.0000000, col, row, minErr, discountFactor,
+    //StatesMap states =  dynamicProgrammingMDPsolver(-1.65, col, row, minErr, discountFactor);
+    //states.printStates();
+    //states.printPolicy();
+    binarySearch(-10.00000000, 0 - minErr, col, row, minErr, discountFactor,
                  RsList, policyCount, RsPolicyMap);
     
     cout << RsList.size() << endl;
     sort(RsList.begin(), RsList.end());
-    for (int i = 0; i < RsList.size(); ++i)
+    cout << "Threshold value: " << 0 << endl;
+    
+    StatesMap lastStates = dynamicProgrammingMDPsolver(RsList[RsList.size() - 1], col, row, minErr, discountFactor);
+    
+    for (int i = (int)RsList.size() - 1; i >= 0; --i)
     {
-        cout << "---------RS--------" << endl;
-        cout << "Rs: " << RsList[i] << endl;
-        dynamicProgrammingMDPsolver(RsList[i], col, row, minErr, discountFactor).printPolicy();
-        
+        //cout << "---------RS--------" << endl;
+        cout << "Threshold value: " << RsList[i] << endl;
+        StatesMap states = dynamicProgrammingMDPsolver(RsList[i], col, row, minErr, discountFactor);
+        //states.printStates();
+        states.printCompPolicy(lastStates);
+        lastStates = states;
     }
     
-    /*
-     void binarySearch(double minRs, double maxRs, int col,
-     int row, double minErr,
-     double discountFactor,
-     vector<double> &RsList,
-     map<string, int>& policyCount,
-     map<double, string>& RsPolicyMap)
-     */
 	return 0;
 }

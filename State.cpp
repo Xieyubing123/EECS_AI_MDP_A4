@@ -227,6 +227,39 @@ public:
         cout << endl;
     }
     
+    void printCompPolicy(StatesMap& other)
+    {
+        //cout << "-----------policy-----------\n";
+        
+        for (int row = maxY - 1; row >= 0; --row)
+        {
+            //cout << row + 1;
+            for (int col = 0; col < maxX; ++col)
+            {
+                if (states[col][row].policy == "")
+                {
+                    cout << "policy not set yet" << endl;
+                    exit(1);
+                }
+                
+                if (states[col][row].policy != other.states[col][row].policy)
+                    cout << " *" << states[col][row].policy;
+                else
+                    cout << "  " << states[col][row].policy;
+            }
+            cout << endl;
+        }
+        
+        /*
+        cout << " ";
+        for (int i = 1; i <= maxX; ++i)
+        {
+            cout << "  " << i;
+        }
+        */
+        cout << endl;
+    }
+    
     double getUtility(int x, int y)
     {
         
