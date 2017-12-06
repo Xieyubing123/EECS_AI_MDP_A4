@@ -198,3 +198,26 @@ void binarySearch(double minRs, double maxRs, int col,
     //cout << RsList.size() << endl;
 }
 
+Action randomAct(Action act)
+{
+    int v1 = rand() % 100 + 1;         // v1 in the range 1 to 100
+    
+    vector<Action> UpRan = {UP, LEFT, RIGHT};
+    vector<Action> DownRan = {DOWN, RIGHT, LEFT};
+    vector<Action> LeftRan = {LEFT, DOWN, UP};
+    vector<Action> RightRan = {RIGHT, UP, DOWN};
+
+    vector<vector<Action>> randVec = {UpRan, DownRan, LeftRan, RightRan};
+    if (v1 <= 80)
+    {
+        return randVec[(int)act][0];
+    }
+    else if (v1 <= 100 && v1 > 90)
+    {
+        return randVec[(int)act][2];
+    }
+    else
+    {
+        return randVec[(int)act][1];
+    }
+}
