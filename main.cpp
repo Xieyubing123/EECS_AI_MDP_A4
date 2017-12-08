@@ -12,9 +12,9 @@ int main(void)
     doProblem1();
     
     cout << "\n**********Problem 2**********\n\n" << endl;
-    doProblem2(10);
+    doProblem2(1000);
     cout << "\n" << endl;
-    doProblem2(100);
+    doProblem2(50000);
     cout << "\n" << endl;
     doProblem2(100000);
 
