@@ -23,6 +23,22 @@ void initStatesUtility(StatesMap & states)
     states.setPolicy(4, 2, "-1");
 }
 
+void initP3StatesUtility(StatesMap & states, double r)
+{
+    states.setTerminal(3, 3, 10);//set utitlity, col
+    states.setUtility(1,1,0);
+    states.setUtility(1,2,0);
+    states.setUtility(1,3,0);
+    states.setUtility(2,1,0);
+    states.setUtility(2,2,0);
+    states.setUtility(2,3,0);
+    states.setUtility(3,1,0);
+    states.setUtility(3,2,0);
+    
+    states.setCostOfLiving(1, 3, r);
+    states.setPolicy(3, 3, "+10");
+}
+
 string actToStringPolicy(Action act)
 {
     vector<string> str = {"^", "v", "<", ">"};
@@ -78,7 +94,11 @@ void valueIteration(StatesMap &states, double Rs, double discountFactor,
                 
                 Action tempAct = UP;
                 double maxExp = findBestExp(states, i, j, tempAct);
-                double newUtility = Rs + discountFactor * maxExp;
+                double newUtility = states.getStateCostOfLiving(i, j)
+                                    + discountFactor * maxExp;
+                ///cout << "(" << i << "," << j << ")" << "col: " << states.getStateCostOfLiving(i, j) << endl;
+                //states.printStates();
+                //cout << endl;
                 double change = abs(newUtility - states.getUtility(i, j));
                 
                 if (change > maxChange)
@@ -88,6 +108,8 @@ void valueIteration(StatesMap &states, double Rs, double discountFactor,
             }
         }
         
+        //states.printStates();
+
         if (maxChange < miniErr)
         {
             break;
@@ -115,12 +137,24 @@ void findOptimalPolicy(StatesMap &states, int col, int row)
 
 StatesMap dynamicProgrammingMDPsolver(double Rs,int col,
                                  int row, double minErr,
-                                 double discountFactor)
+                                 double discountFactor, int problemNum)
 {
-    StatesMap states = StatesMap(col, row);
-    initStatesUtility(states);
+    StatesMap states = StatesMap(col, row, Rs);
+    if (problemNum == 1 || problemNum == 2)
+    {
+        initStatesUtility(states);
+    }
+    else
+    {
+        initP3StatesUtility(states, 3);
+        //states.printStates();
+        //states.printCOL();
+
+    }
+    
     valueIteration(states, Rs, discountFactor,
                    minErr, col, row);
+    
     findOptimalPolicy(states, col, row);
     return states;
 }
@@ -142,12 +176,12 @@ void binarySearch(double minRs, double maxRs, int col,
     
     
     StatesMap minState =
-    dynamicProgrammingMDPsolver(minRs, col, row, minErr, discountFactor);
+    dynamicProgrammingMDPsolver(minRs, col, row, minErr, discountFactor, 1);
     minPolStr = minState.makePlicyStr();
     RsPolicyMap[minRs] = minPolStr;
     
     StatesMap maxState =
-    dynamicProgrammingMDPsolver(maxRs, col, row, minErr, discountFactor);
+    dynamicProgrammingMDPsolver(maxRs, col, row, minErr, discountFactor, 1);
     maxPolStr = maxState.makePlicyStr();
     RsPolicyMap[maxRs] = maxPolStr;
 
@@ -180,9 +214,6 @@ void binarySearch(double minRs, double maxRs, int col,
         }
         
         
-        
-        
-        
         binarySearch((maxRs + minRs)/2.0000000, maxRs - err, col,
                      row, minErr, discountFactor,
                      RsList,policyCount,RsPolicyMap);
@@ -197,7 +228,74 @@ void binarySearch(double minRs, double maxRs, int col,
     //cout << RsList.size() << endl;
 }
 
-
+void gammaBinarySearch(double minDis, double maxDis, int col,
+                  int row, double minErr,
+                  vector<double> &DisList,
+                       double Rs,
+                  map<string, int>& policyCount,
+                  map<double, string>& RsPolicyMap)
+{
+    double err = minErr;
+    if (maxDis - minDis < err)
+    {
+        return;
+    }
+    string minPolStr = "";
+    string maxPolStr = "";
+    
+    
+    StatesMap minState =
+    dynamicProgrammingMDPsolver(Rs, col, row, minErr, minDis, 3);
+    minPolStr = minState.makePlicyStr();
+    RsPolicyMap[minDis] = minPolStr;
+    
+    StatesMap maxState =
+    dynamicProgrammingMDPsolver(Rs, col, row, minErr, maxDis, 3);
+    maxPolStr = maxState.makePlicyStr();
+    RsPolicyMap[maxDis] = maxPolStr;
+    
+    
+    
+    if (minPolStr == maxPolStr)
+    {
+        if (policyCount[maxPolStr] < 1)
+        {
+            DisList.push_back(maxDis);
+            policyCount[maxPolStr]++;
+        }
+        
+        
+    }
+    else
+    {
+        /*
+         if (policyCount[minPolStr] < 1)
+         {
+         RsList.push_back(minRs);
+         policyCount[minPolStr]++;
+         }
+         */
+        
+        if (policyCount[maxPolStr] < 1)
+        {
+            DisList.push_back(maxDis);
+            policyCount[maxPolStr]++;
+        }
+        
+        
+        gammaBinarySearch((maxDis + minDis)/2.0000000, maxDis - err, col,
+                     row, minErr,
+                     DisList, Rs, policyCount,RsPolicyMap);
+        
+        gammaBinarySearch(minDis + err, (maxDis + minDis)/2.0000000 , col,
+                     row, minErr,
+                     DisList, Rs, policyCount,RsPolicyMap);
+        
+        
+    }
+    
+    //cout << RsList.size() << endl;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////p2/////////////////

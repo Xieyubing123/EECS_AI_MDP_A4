@@ -15,6 +15,7 @@ public:
 	int idx;
 	int idy;
 	double utility;
+    double costOfLiving;
     string policy;
     
     State()
@@ -27,7 +28,7 @@ public:
         policy = "";
     }
     
-	State(int col, int row, double utilityVal)
+	State(int col, int row, double utilityVal, double col_R)
 	{
 		idx = col;
 		idy = row;
@@ -35,11 +36,12 @@ public:
         wall = false;
         terminal = false;
         policy = "";
+        costOfLiving = col_R;
 
 	}
     
     void reInit (int col, int row, double utilityVal,
-                 bool w, bool t, string pol)
+                 bool w, bool t, string pol, double col_R)
     {
         idx = col;
         idy = row;
@@ -47,6 +49,8 @@ public:
         wall = w;
         terminal = t;
         policy = pol;
+        costOfLiving = col_R;
+
     }
 
 	void setU(double val)
@@ -78,10 +82,11 @@ public:
     string policyStr;
     
     vector<State> StateVec;
-    StatesMap(int x, int y)
+    StatesMap(int x, int y, double CostOfLiving)
     {
         maxX = x;
         maxY = y;
+        Rs = CostOfLiving;
         initMap();
     }
     
@@ -89,15 +94,44 @@ public:
     {
         //matrix.resize( row_count , vector<int>( column_count , initialization_value ) );
 
-        states.resize(maxX, vector<State>(maxY, State(1, 1, 0)));
+        states.resize(maxX, vector<State>(maxY, State(1, 1, 0, Rs)));
         
         for (int col = 0; col < maxX; ++col)
         {
             for (int row = 0; row < maxY; ++row)
             {
-                states[col][row].reInit(col, row, 0, false, false, "");
+                states[col][row].reInit(col, row, 0, false, false, "", Rs);
             }
         }
+    }
+    
+    double getStateCostOfLiving(int x, int y)
+    {
+        if (x <= 0 || x > maxX || y <= 0 || y > maxY)
+        {
+            cout << "invalid row or col" << endl;
+            exit(1);
+        }
+        
+        int idx = x - 1;
+        int idy = y - 1;
+        
+        if(states[idx][idy].wall)
+        {
+            cout << "wall has no COL" << endl;
+            exit(1);
+        }
+        
+        if(states[idx][idy].terminal)
+        {
+            //for eterminal state col == utility
+            return states[idx][idy].utility;
+        }
+        else
+        {
+            return states[idx][idy].costOfLiving;
+        }
+        
     }
     
     void setWall(int x, int y)
@@ -130,6 +164,7 @@ public:
         int idy = y - 1;
         states[idx][idy].terminal = true;
         states[idx][idy].utility = u;
+        states[idx][idy].costOfLiving = u;
     }
     
     void setUtility(int x, int y, double utility)
@@ -143,6 +178,19 @@ public:
         int idy = y - 1;
         states[idx][idy].utility = utility;
     }
+    
+    void setCostOfLiving(int x, int y, double col)
+    {
+        if (x <= 0 || x > maxX || y <= 0 || y > maxY)
+        {
+            cout << "invalid row or col" << endl;
+            exit(1);
+        }
+        int idx = x - 1;
+        int idy = y - 1;
+        states[idx][idy].costOfLiving = col;
+    }
+    
     void setPolicy(int x, int y, string pol)
     {
         if (x <= 0 || x > maxX || y <= 0 || y > maxY)
@@ -184,6 +232,33 @@ public:
         cout << endl;
     }
     
+    void printCOL()
+    {
+        cout << "-----------Cost of Living-----------\n";
+        
+        for (int row = maxY - 1; row >= 0; --row)
+        {
+            cout << row + 1;
+            for (int col = 0; col < maxX; ++col)
+            {
+                if (states[col][row].wall)
+                {
+                    cout << "    " << "xxxxxxxxxx";
+                }
+                else
+                {
+                    cout << "    " << setprecision(8) << fixed << states[col][row].costOfLiving;
+                }
+            }
+            cout << endl;
+        }
+        
+        for (int i = 1; i <= maxX; ++i)
+        {
+            cout << "            " << i;
+        }
+        cout << endl;
+    }
     
     string makePlicyStr()
     {
@@ -243,9 +318,9 @@ public:
                 }
                 
                 if (states[col][row].policy != other.states[col][row].policy)
-                    cout << " *" << states[col][row].policy;
+                    cout << "   " << states[col][row].policy << "*";
                 else
-                    cout << "  " << states[col][row].policy;
+                    cout << "   " << states[col][row].policy;
             }
             cout << endl;
         }
