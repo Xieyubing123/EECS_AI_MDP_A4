@@ -342,6 +342,7 @@ double simulateRun(StatesMap& states, int initX, int initY, double Rs)
         
         if(newState.terminal)
         {
+            reward += newState.utility;
             break;
         }
         

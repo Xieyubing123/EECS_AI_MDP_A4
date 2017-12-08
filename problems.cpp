@@ -23,7 +23,7 @@ void doProblem1()
     binarySearch(-2.00000000, 0 - 0.0001, col, row, minErr, discountFactor,
                  RsList, policyCount, RsPolicyMap);
     
-    cout << RsList.size() << endl;
+    //cout << RsList.size() << endl;
     std::sort(RsList.begin(), RsList.end());
     //cout << "Threshold value: " << 0 << endl;
     
@@ -32,7 +32,15 @@ void doProblem1()
     for (int i = (int)RsList.size() - 1; i >= 0; --i)
     {
         //cout << "---------RS--------" << endl;
-        cout << "Threshold value: " << RsList[i] << endl;
+        if (i == ((int)RsList.size() - 1))
+        {
+            cout << "Up Bound(approximate 0): " << RsList[i] << endl;
+        }
+        else
+        {
+            cout << "Threshold value: " << RsList[i] << endl;
+        }
+        
         StatesMap states = dynamicProgrammingMDPsolver(RsList[i], col, row, minErr, discountFactor, 1);
         //states.printStates();
         states.printCompPolicy(lastStates);
@@ -53,7 +61,8 @@ void doProblem2(int run)
     int row = 3;
     StatesMap States = dynamicProgrammingMDPsolver(Rs, col, row, minErr, discountFactor, 2);
     States.printStates();
-    
+    States.printPolicy();
+
     double sum = 0;
     double mean = 0;
     int size = 0;
@@ -68,14 +77,14 @@ void doProblem2(int run)
         outfile << temp << endl;
         sum += temp;
         size++;
-        cout << temp << endl;
+        //cout << temp << endl;
         rewardShowUpTime[temp]++;
     }
     
-    cout << "\n count:" << endl;
+    cout << "reward:     count:" << endl;
     for (auto i = rewardShowUpTime.begin(); i != rewardShowUpTime.end(); ++i)
     {
-        cout << i->first << " " << i->second << endl;
+        cout << i->first << "    " << i->second << endl;
         RevRewardShowUpTime[i->second] = i->first;
     }
     //simulateRun
@@ -110,7 +119,7 @@ void doProblem3()
     gammaBinarySearch(0, 1 - 0.001000, col, row, minErr, DisList, Rs, policyCount, RsPolicyMap);
 
     
-    cout << DisList.size() << endl;
+    //cout << DisList.size() << endl;
     std::sort(DisList.begin(), DisList.end());
     //cout << "Threshold value: " << 0 << endl;
     
@@ -119,7 +128,15 @@ void doProblem3()
     for (int i = (int)DisList.size() - 1; i >= 0; --i)
     {
         //cout << "---------RS--------" << endl;
-        cout << "Threshold value: " << DisList[i] << endl;
+        if (i == ((int)DisList.size() - 1))
+        {
+            cout << "Upper bound: (approcimate 1) " << DisList[i] << endl;
+        }
+        else
+        {
+            cout << "Threshold value: " << DisList[i] << endl;
+        }
+        
         StatesMap states = dynamicProgrammingMDPsolver(Rs, col, row, minErr, DisList[i], 3);
         //states.printStates();
         states.printCompPolicy(lastStates);
