@@ -12,11 +12,11 @@ int main(void)
     doProblem1();
     
     cout << "\n**********Problem 2**********\n\n" << endl;
-    doProblem2(10000);
+    doProblem2(10);
     cout << "\n" << endl;
-    doProblem2(50000);
+    //doProblem2(100);
     cout << "\n" << endl;
-    doProblem2(100000);
+    //doProblem2(1000);
 
     cout << "\n**********Problem 3**********\n\n" << endl;
     doProblem3();

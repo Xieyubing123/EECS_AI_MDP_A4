@@ -106,7 +106,7 @@ void doProblem2(int run)
 
 void doProblem3()
 {
-    double minErr = 0.001000;
+    double minErr = 0.000000001000;
     double discountFactor = 0.99;
     double Rs = -1.00000;
     int col = 3;
@@ -130,7 +130,7 @@ void doProblem3()
         //cout << "---------RS--------" << endl;
         if (i == ((int)DisList.size() - 1))
         {
-            cout << "Upper bound: (approcimate 1) " << DisList[i] << endl;
+            cout << "Upper bound: (approximate 1) " << DisList[i] << endl;
         }
         else
         {
