@@ -106,7 +106,7 @@ void doProblem2(int run)
 
 void doProblem3()
 {
-    double minErr = 0.000000001000;
+    double minErr = 0.0000001000;
     double discountFactor = 0.99;
     double Rs = -1.00000;
     int col = 3;
