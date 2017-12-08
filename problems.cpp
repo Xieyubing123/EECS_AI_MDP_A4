@@ -2,6 +2,7 @@
 #include<fstream>
 #include<vector>
 #include<map>
+#include<algorithm>
 #include "helper.cpp"
 #include <math.h>       /* sqrt */
 using namespace std;
@@ -23,7 +24,7 @@ void doProblem1()
                  RsList, policyCount, RsPolicyMap);
     
     cout << RsList.size() << endl;
-    sort(RsList.begin(), RsList.end());
+    std::sort(RsList.begin(), RsList.end());
     //cout << "Threshold value: " << 0 << endl;
     
     StatesMap lastStates = dynamicProgrammingMDPsolver(RsList[RsList.size() - 1], col, row, minErr, discountFactor, 1);
@@ -110,7 +111,7 @@ void doProblem3()
 
     
     cout << DisList.size() << endl;
-    sort(DisList.begin(), DisList.end());
+    std::sort(DisList.begin(), DisList.end());
     //cout << "Threshold value: " << 0 << endl;
     
     StatesMap lastStates = dynamicProgrammingMDPsolver(Rs, col, row, minErr, DisList[DisList.size() - 1], 3);
