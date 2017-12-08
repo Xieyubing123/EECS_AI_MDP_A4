@@ -8,7 +8,7 @@ using namespace std;
 
 int main(void)
 {
-    doProblem2();
+    doProblem1();
 
     
 	return 0;

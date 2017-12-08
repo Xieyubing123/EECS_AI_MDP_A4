@@ -2,7 +2,6 @@
 #include<vector>
 #include<map>
 #include <cmath>        // std::abs
-
 #include "State.cpp"
 
 void initStatesUtility(StatesMap & states)
@@ -198,6 +197,11 @@ void binarySearch(double minRs, double maxRs, int col,
     //cout << RsList.size() << endl;
 }
 
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////p2/////////////////
+
 Action randomAct(Action act)
 {
     int v1 = rand() % 100 + 1;         // v1 in the range 1 to 100
@@ -206,7 +210,7 @@ Action randomAct(Action act)
     vector<Action> DownRan = {DOWN, RIGHT, LEFT};
     vector<Action> LeftRan = {LEFT, DOWN, UP};
     vector<Action> RightRan = {RIGHT, UP, DOWN};
-
+    
     vector<vector<Action>> randVec = {UpRan, DownRan, LeftRan, RightRan};
     if (v1 <= 80)
     {
@@ -221,3 +225,32 @@ Action randomAct(Action act)
         return randVec[(int)act][1];
     }
 }
+
+double simulateRun(StatesMap& states, int initX, int initY, double Rs)
+{
+    int x = initX;
+    int y = initY;
+    double reward = 0;
+    //get
+    //nextState = states.getResultStates(x, y, randomAct())
+    while (true)
+    {
+        Action bestAct = UP;
+        findBestExp(states, x, y, bestAct);
+        
+        Action randomizedAct = randomAct(bestAct);
+        State newState = states.getResultStates(x, y, randomizedAct)[0];
+        reward += Rs;
+        
+        if(newState.terminal)
+        {
+            break;
+        }
+        
+        x = newState.idx + 1;
+        y = newState.idy + 1;
+    }
+    
+    return reward;
+}
+

@@ -12,15 +12,15 @@ public:
     bool terminal;
     bool wall;
 
-	int x;
-	int y;
+	int idx;
+	int idy;
 	double utility;
     string policy;
     
     State()
     {
-        x = 1;
-        y = 1;
+        idx = 1;
+        idy = 1;
         utility = 0;
         wall = false;
         terminal = false;
@@ -29,8 +29,8 @@ public:
     
 	State(int col, int row, double utilityVal)
 	{
-		x = col;
-		y = row;
+		idx = col;
+		idy = row;
 		utility = utilityVal;
         wall = false;
         terminal = false;
@@ -41,8 +41,8 @@ public:
     void reInit (int col, int row, double utilityVal,
                  bool w, bool t, string pol)
     {
-        x = col;
-        y = row;
+        idx = col;
+        idy = row;
         utility = utilityVal;
         wall = w;
         terminal = t;
@@ -291,6 +291,7 @@ public:
         
         return states[x - 1][y - 1];
     }
+
     vector<State> getResultStates(int x, int y, Action act)
     {
         if (x <= 0 || x > maxX || y <= 0 || y > maxY)
