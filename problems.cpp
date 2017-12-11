@@ -133,9 +133,12 @@ void doProblem3(ofstream& out)
     vector<double> LowerBound;
     map<string, int> LowerBoundpolicyCount;
     map<double, string> LowerBoundRsPolicyMap;
-    gammaBinarySearch(0, 0.1, col, row, minErr, LowerBound, Rs, LowerBoundpolicyCount, LowerBoundRsPolicyMap);
+    gammaBinarySearch(0, 0.0001, col, row, minErr, LowerBound, Rs, LowerBoundpolicyCount, LowerBoundRsPolicyMap);
 
     StatesMap lastStates = dynamicProgrammingMDPsolver(Rs, col, row, minErr, LowerBound[0], 3);
+    out << "Lower bound: (approximate 0) " << LowerBound[0] << endl;
+    lastStates.printPolicyTofile(out);
+    lastStates.printStatesToFile(out);
     
     for (int i = 0; i <= (int)DisList.size() - 1; ++i)
     {
