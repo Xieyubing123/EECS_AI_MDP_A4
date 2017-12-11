@@ -8,11 +8,11 @@
 using namespace std;
 
 
-void doProblem1()
+void doProblem1(ofstream& out)
 {
-    double minErr = 0.0000001;
+    double minErr = 0.00000010000;
     double discountFactor = 1;
-    double Rs = -0.040000;
+    double Rs = -0.040000000;
     int col = 4;
     int row = 3;
     map<string, int> policyMap;
@@ -20,7 +20,7 @@ void doProblem1()
     map<string, int> policyCount;
     map<double, string> RsPolicyMap;
     
-    binarySearch(-2.00000000, 0 - 0.0001, col, row, minErr, discountFactor,
+    binarySearch(-2.00000000, 0 - 0.00010000, col, row, minErr, discountFactor,
                  RsList, policyCount, RsPolicyMap);
     
     //cout << RsList.size() << endl;
@@ -34,21 +34,21 @@ void doProblem1()
         //cout << "---------RS--------" << endl;
         if (i == ((int)RsList.size() - 1))
         {
-            cout << "Up Bound(approximate 0): " << RsList[i] << endl;
+            out << "Up Bound(approximate 0): " << RsList[i] << endl;
         }
         else
         {
-            cout << "Threshold value: " << RsList[i] << endl;
+            out << "Threshold value: " << RsList[i] << endl;
         }
         
         StatesMap states = dynamicProgrammingMDPsolver(RsList[i], col, row, minErr, discountFactor, 1);
         //states.printStates();
-        states.printCompPolicy(lastStates);
+        states.printCompPolicyToFile(lastStates, out);
         lastStates = states;
     }
 }
 
-void doProblem2(int run)
+void doProblem2(int run, double & Resultmean, double& Resultstd, double & expectedVal, double& firstRun)
 {
     map<double, int> rewardShowUpTime;
     map<int, double> RevRewardShowUpTime;
@@ -66,32 +66,37 @@ void doProblem2(int run)
     double sum = 0;
     double mean = 0;
     int size = 0;
-    ofstream outfile;
-    outfile.open("/Users/yubingxie/PycharmProjects/dropHistorgram/data.txt");
+    //ofstream outfile;
+    std::ofstream outfile ("P2-data-" + to_string(run) + ".txt");
+    //outfile.open("/Users/yubingxie/PycharmProjects/dropHistorgram/data.txt");
     
-    cout << "\n values:" << endl;
+    //cout << "\n values:" << endl;
     for (int i = 0; i < run; ++i)
     {
         double temp = simulateRun(States, 4, 1, Rs);
         vals.push_back(temp);
         outfile << temp << endl;
+        if (i == 0)
+        {
+            firstRun = temp;
+        }
         sum += temp;
         size++;
         //cout << temp << endl;
         rewardShowUpTime[temp]++;
     }
     
-    cout << "reward:     count:" << endl;
+    //cout << "reward:     count:" << endl;
     for (auto i = rewardShowUpTime.begin(); i != rewardShowUpTime.end(); ++i)
     {
-        cout << i->first << "    " << i->second << endl;
+        //cout << i->first << "    " << i->second << endl;
         RevRewardShowUpTime[i->second] = i->first;
     }
     //simulateRun
     outfile.close();
 
     mean = sum/size;
-    cout << "mean of " << size <<  " run : " <<  mean << endl;
+    //cout << "mean of " << size <<  " run : " <<  mean << endl;
     
     double std = 0;
     for (int i = 0; i < size; ++i)
@@ -100,11 +105,13 @@ void doProblem2(int run)
     }
     std = std / size;
     std = sqrt(std);
-    cout << "standard deviation of " << size <<  " run : " <<  std << endl;
-
+    //cout << "standard deviation of " << size <<  " run : " <<  std << endl;
+    Resultmean = mean;
+    Resultstd = std;
+    expectedVal = States.getUtility(4, 1);
 }
 
-void doProblem3()
+void doProblem3(ofstream& out)
 {
     double minErr = 0.0000001000;
     double discountFactor = 0.99;
@@ -123,23 +130,29 @@ void doProblem3()
     std::sort(DisList.begin(), DisList.end());
     //cout << "Threshold value: " << 0 << endl;
     
-    StatesMap lastStates = dynamicProgrammingMDPsolver(Rs, col, row, minErr, DisList[DisList.size() - 1], 3);
+    vector<double> LowerBound;
+    map<string, int> LowerBoundpolicyCount;
+    map<double, string> LowerBoundRsPolicyMap;
+    gammaBinarySearch(0, 0.1, col, row, minErr, LowerBound, Rs, LowerBoundpolicyCount, LowerBoundRsPolicyMap);
+
+    StatesMap lastStates = dynamicProgrammingMDPsolver(Rs, col, row, minErr, LowerBound[0], 3);
     
-    for (int i = (int)DisList.size() - 1; i >= 0; --i)
+    for (int i = 0; i <= (int)DisList.size() - 1; ++i)
     {
         //cout << "---------RS--------" << endl;
         if (i == ((int)DisList.size() - 1))
         {
-            cout << "Upper bound: (approximate 1) " << DisList[i] << endl;
+            out << "Upper bound: (approximate 1) " << DisList[i] << endl;
         }
         else
         {
-            cout << "Threshold value: " << DisList[i] << endl;
+            out << "Threshold value: " << DisList[i] << endl;
         }
         
         StatesMap states = dynamicProgrammingMDPsolver(Rs, col, row, minErr, DisList[i], 3);
         //states.printStates();
-        states.printCompPolicy(lastStates);
+        states.printPolicyTofile(out);
+        states.printStatesToFile(out);
         lastStates = states;
     }
 }

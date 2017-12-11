@@ -232,6 +232,34 @@ public:
         cout << endl;
     }
     
+    void printStatesToFile(ofstream& out)
+    {
+        out << "Utilities:" << endl;
+        
+        for (int row = maxY - 1; row >= 0; --row)
+        {
+            //out << row + 1;
+            for (int col = 0; col < maxX; ++col)
+            {
+                if (states[col][row].wall)
+                {
+                    out << "    " << "xxxxxxxxxx";
+                }
+                else
+                {
+                    out << "    " << setprecision(8) << fixed << states[col][row].utility;
+                }
+            }
+            out << endl;
+        }
+        
+        for (int i = 1; i <= maxX; ++i)
+        {
+            //out << "            " << i;
+        }
+        out << endl;
+    }
+    
     void printCOL()
     {
         cout << "-----------Cost of Living-----------\n";
@@ -302,6 +330,34 @@ public:
         cout << endl;
     }
     
+    void printPolicyTofile(ofstream& out)
+    {
+        out << "Optimal Policy:" << endl;
+
+        for (int row = maxY - 1; row >= 0; --row)
+        {
+            //cout << row + 1;
+            for (int col = 0; col < maxX; ++col)
+            {
+                if (states[col][row].policy == "")
+                {
+                    out << "policy not set yet" << endl;
+                    exit(1);
+                }
+                
+                out << "  " << states[col][row].policy;
+            }
+            out << endl;
+        }
+        
+        //out << " ";
+        for (int i = 1; i <= maxX; ++i)
+        {
+            //out << "  " << i;
+        }
+        out << endl;
+    }
+    
     void printCompPolicy(StatesMap& other)
     {
         //cout << "-----------policy-----------\n";
@@ -324,15 +380,32 @@ public:
             }
             cout << endl;
         }
-        
-        /*
-        cout << " ";
-        for (int i = 1; i <= maxX; ++i)
-        {
-            cout << "  " << i;
-        }
-        */
         cout << endl;
+    }
+    
+    void printCompPolicyToFile(StatesMap& other, ofstream& out)
+    {
+        out << "Optimal Policy:" << endl;
+
+        for (int row = maxY - 1; row >= 0; --row)
+        {
+            //cout << row + 1;
+            for (int col = 0; col < maxX; ++col)
+            {
+                if (states[col][row].policy == "")
+                {
+                    out << "policy not set yet" << endl;
+                    exit(1);
+                }
+                
+                if (states[col][row].policy != other.states[col][row].policy)
+                    out << "   " << states[col][row].policy << "*";
+                else
+                    out << "   " << states[col][row].policy;
+            }
+            out << endl;
+        }
+        out << endl;
     }
     
     double getUtility(int x, int y)
