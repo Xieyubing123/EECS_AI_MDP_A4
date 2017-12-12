@@ -113,7 +113,7 @@ void doProblem2(int run, double & Resultmean, double& Resultstd, double & expect
 
 void doProblem3(ofstream& out)
 {
-    double minErr = 0.00002000;
+    double minErr = 0.00001000;
     //double discountFactor = 0.99;
     double Rs = -1.00000;
     int col = 3;
