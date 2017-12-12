@@ -113,8 +113,8 @@ void doProblem2(int run, double & Resultmean, double& Resultstd, double & expect
 
 void doProblem3(ofstream& out)
 {
-    double minErr = 0.00001000;
-    double discountFactor = 0.99;
+    double minErr = 0.000005000;
+    //double discountFactor = 0.99;
     double Rs = -1.00000;
     int col = 3;
     int row = 3;
@@ -123,7 +123,7 @@ void doProblem3(ofstream& out)
     map<string, int> policyCount;
     map<double, string> RsPolicyMap;
     
-    gammaBinarySearch(0, 1 - 0.00010, col, row, minErr, DisList, Rs, policyCount, RsPolicyMap);
+    gammaBinarySearch(0, 1 - 0.0010, col, row, minErr, DisList, Rs, policyCount, RsPolicyMap);
 
     
     //cout << DisList.size() << endl;
@@ -133,7 +133,7 @@ void doProblem3(ofstream& out)
     vector<double> LowerBound;
     map<string, int> LowerBoundpolicyCount;
     map<double, string> LowerBoundRsPolicyMap;
-    gammaBinarySearch(0, 0.0001, col, row, minErr, LowerBound, Rs, LowerBoundpolicyCount, LowerBoundRsPolicyMap);
+    gammaBinarySearch(0, 0.001, col, row, minErr, LowerBound, Rs, LowerBoundpolicyCount, LowerBoundRsPolicyMap);
 
     StatesMap lastStates = dynamicProgrammingMDPsolver(Rs, col, row, minErr, LowerBound[0], 3);
     out << "Lower bound: (approximate 0) " << LowerBound[0] << endl;
