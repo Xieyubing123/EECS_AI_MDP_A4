@@ -1,0 +1,54 @@
+Up Bound(approximate 0): -0.0001
+Optimal Policy:
+   >   >   >   +1
+   ^   X   <   -1
+   ^   <   <   v
+
+Threshold value: -0.0221455
+Optimal Policy:
+   >   >   >   +1
+   ^   X   <   -1
+   ^   <   <   <*
+
+Threshold value: -0.0273574
+Optimal Policy:
+   >   >   >   +1
+   ^   X   ^*   -1
+   ^   <   <   <
+
+Threshold value: -0.0448332
+Optimal Policy:
+   >   >   >   +1
+   ^   X   ^   -1
+   ^   <   ^*   <
+
+Threshold value: -0.0849889
+Optimal Policy:
+   >   >   >   +1
+   ^   X   ^   -1
+   ^   >*   ^   <
+
+Threshold value: -0.452624
+Optimal Policy:
+   >   >   >   +1
+   ^   X   ^   -1
+   ^   >   ^   ^*
+
+Threshold value: -0.731139
+Optimal Policy:
+   >   >   >   +1
+   ^   X   ^   -1
+   >*   >   ^   ^
+
+Threshold value: -1.56426
+Optimal Policy:
+   >   >   >   +1
+   ^   X   ^   -1
+   >   >   >*   ^
+
+Threshold value: -1.64971
+Optimal Policy:
+   >   >   >   +1
+   ^   X   >*   -1
+   >   >   >   ^
+
