@@ -113,7 +113,7 @@ void doProblem2(int run, double & Resultmean, double& Resultstd, double & expect
 
 void doProblem3(ofstream& out)
 {
-    double minErr = 0.0000005000;
+    double minErr = 0.00001000;
     double discountFactor = 0.99;
     double Rs = -1.00000;
     int col = 3;
@@ -123,7 +123,7 @@ void doProblem3(ofstream& out)
     map<string, int> policyCount;
     map<double, string> RsPolicyMap;
     
-    gammaBinarySearch(0, 1 - 0.0010, col, row, minErr, DisList, Rs, policyCount, RsPolicyMap);
+    gammaBinarySearch(0, 1 - 0.00010, col, row, minErr, DisList, Rs, policyCount, RsPolicyMap);
 
     
     //cout << DisList.size() << endl;
