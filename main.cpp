@@ -49,7 +49,7 @@ int main(void)
 
     cout << "\n**********Problem 3**********\n\n" << endl;
     
-    std::ofstream outP3 ("P3-output.txt");
+    std::ofstream outP3 ("../generated/P3-output.txt");
     doProblem3(outP3);
     outP3.close();
 
