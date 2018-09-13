@@ -3,7 +3,6 @@
 
 #include <cmath>        // std::abs
 #include "StatesMap.h"
-#include "State.h"
 
 void initStatesUtility(StatesMap & states);
 
@@ -20,7 +19,7 @@ void findOptimalPolicy(StatesMap &states, int col, int row);
 
 StatesMap dpMDPsolver(double Rs,int col,
                                  int row, double minErr,
-                                 double discountFactor, int problemNum);
+                                 double discountFactor, const int problemNum);
 
 void binarySearch(double minRs, double maxRs, int col,
                   int row, double minErr,

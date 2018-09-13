@@ -1,20 +1,17 @@
 #include "problems.h"
-#include "helper.h"
-#include "StatesMap.h"
-#include "State.h"
 
 using namespace std;
 
 int main(void)
 {
-    cout << "\n**********Problem 1**********" << endl;
+    cout << "\n**********Problem 1**********\n" << endl;
 
     std::ofstream outfileP1 ("../generated/P1-output.txt");
     doProblem1(outfileP1);
     outfileP1.close();
-    cout << "\nProblem 1 done, result in ../generated/P1-output.txt\n\n" << endl;
-    
-    cout << "\n**********Problem 2**********" << endl;
+    cout << "P1 done result folder: ../generated/\n\n" << endl;
+
+    cout << "\n**********Problem 2**********\n" << endl;
     
     double mean10 = 0;
     double firstRun10 = 0;
@@ -27,12 +24,14 @@ int main(void)
     double mean1000 = 0;
     double std1000 = 0;
     double exp1000 = 0;
+    
+    const int RUN_10 = 10;
+    const int RUN_100 = 100;
+    const int RUN_1000 = 1000;
 
-    doProblem2(10, mean10, std10, exp10, firstRun10);
-    cout << "\n" << endl;
-    doProblem2(100, mean100, std100, exp100, temp);
-    cout << "\n" << endl;
-    doProblem2(1000, mean1000, std1000, exp1000, temp);
+    doProblem2(RUN_10, mean10, std10, exp10, firstRun10);
+    doProblem2(RUN_100, mean100, std100, exp100, temp);
+    doProblem2(RUN_1000, mean1000, std1000, exp1000, temp);
 
     std::ofstream outfileP2 ("../generated/P2-output.txt");
     
@@ -45,14 +44,14 @@ int main(void)
     outfileP2 << "1000-run average utility: " << mean1000 << endl;
     outfileP2 << "1000-run standard dev: " << std1000 << endl;
     outfileP2.close();
-    cout << "\nProblem 2 done\n\n" << endl;
+    cout << "P2 done result folder: ../generated/\n\n" << endl;
     
-    cout << "\n**********Problem 3**********\n\n" << endl;
+    cout << "\n**********Problem 3**********\n" << endl;
     
     std::ofstream outP3 ("../generated/P3-output.txt");
     doProblem3(outP3);
     outP3.close();
-    cout << "\nProblem 3 done, result in ../generated/P3-output.txt\n\n" << endl;
+    cout << "P3 done result folder: ../generated/\n\n" << endl;
 
     
 	return 0;

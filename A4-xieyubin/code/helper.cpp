@@ -122,13 +122,13 @@ void findOptimalPolicy(StatesMap &states, int col, int row)
 
 //dynamicProgrammingMDPsolver
 StatesMap dpMDPsolver(double Rs,int col, int row, double minErr,
-                         double discountFactor, int problemNum)
+                         double discountFactor, const int problemNum)
 {
     StatesMap states = StatesMap(col, row, Rs);
     if (problemNum == 1 || problemNum == 2)
         initStatesUtility(states);
     else
-        initP3StatesUtility(states, 3);
+        initP3StatesUtility(states, problemNum);
     
     valueIteration(states, Rs, discountFactor,
                    minErr, col, row);
@@ -146,6 +146,8 @@ void binarySearch(double minRs, double maxRs, int col,
                   map<double, string>& RsPolicyMap)
 {
     double err = 0.0000001;
+    const int PROBLEM_1 = 1;  //also work for problem 2
+
     if (maxRs - minRs < err)
         return;
 
@@ -153,12 +155,12 @@ void binarySearch(double minRs, double maxRs, int col,
     string maxPolStr = "";
     
     StatesMap minState =
-    dpMDPsolver(minRs, col, row, minErr, discountFactor, 1);
+    dpMDPsolver(minRs, col, row, minErr, discountFactor, PROBLEM_1);
     minPolStr = minState.makePlicyStr();
     RsPolicyMap[minRs] = minPolStr;
     
     StatesMap maxState =
-    dpMDPsolver(maxRs, col, row, minErr, discountFactor, 1);
+    dpMDPsolver(maxRs, col, row, minErr, discountFactor, PROBLEM_1);
     maxPolStr = maxState.makePlicyStr();
     RsPolicyMap[maxRs] = maxPolStr;
 
@@ -199,6 +201,7 @@ void gammaBinarySearch(double minDis, double maxDis, int col,
                         map<double, string>& RsPolicyMap)
 {
     double err = minErr;
+    const int PROBLEM_3 = 3;
     if (maxDis - minDis < err)
         return;
 
@@ -207,12 +210,12 @@ void gammaBinarySearch(double minDis, double maxDis, int col,
     
     
     StatesMap minState =
-    dpMDPsolver(Rs, col, row, minErr, minDis, 3);
+    dpMDPsolver(Rs, col, row, minErr, minDis, PROBLEM_3);
     minPolStr = minState.makePlicyStr();
     RsPolicyMap[minDis] = minPolStr;
     
     StatesMap maxState =
-    dpMDPsolver(Rs, col, row, minErr, maxDis, 3);
+    dpMDPsolver(Rs, col, row, minErr, maxDis, PROBLEM_3);
     maxPolStr = maxState.makePlicyStr();
     RsPolicyMap[maxDis] = maxPolStr;
     

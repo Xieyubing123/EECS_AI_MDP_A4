@@ -1,11 +1,11 @@
 #include "problems.h"
 using namespace std;
 
-
 void doProblem1(ofstream& out)
 {
     double minErr = 0.00000010000;
     double discountFactor = 1;
+    const int PROBLEM_1 = 1;
     int col = 4;
     int row = 3;
     map<string, int> policyMap;
@@ -18,7 +18,8 @@ void doProblem1(ofstream& out)
     std::sort(RsList.begin(), RsList.end());
 
     StatesMap lastStates = dpMDPsolver(RsList[RsList.size() - 1],
-                                       col, row, minErr, discountFactor, 1);
+                                       col, row, minErr, discountFactor,
+                                       PROBLEM_1);
     
     for (int i = (int)RsList.size() - 1; i >= 0; --i)
     {
@@ -37,18 +38,16 @@ void doProblem1(ofstream& out)
 void doProblem2(int run, double & Resultmean, double& Resultstd,
                          double & expectedVal, double& firstRun)
 {
-    map<double, int> rewardShowUpTime;
-    map<int, double> RevRewardShowUpTime;
     vector<double> vals;
 
     double minErr = 0.0000001;
     double discountFactor = 1;
     double Rs = -0.040000;
+    const int PROBLEM_2 = 2;
     int col = 4;
     int row = 3;
-    StatesMap States = dpMDPsolver(Rs, col, row, minErr, discountFactor, 2);
-    States.printStates();
-    States.printPolicy();
+    StatesMap States = dpMDPsolver(Rs, col, row, minErr,
+                                   discountFactor, PROBLEM_2);
 
     double sum = 0;
     double mean = 0;
@@ -63,30 +62,22 @@ void doProblem2(int run, double & Resultmean, double& Resultstd,
         vals.push_back(temp);
         outfile << temp << endl;
         if (i == 0)
-        {
             firstRun = temp;
-        }
+        
         sum += temp;
         size++;
-        rewardShowUpTime[temp]++;
     }
     
-    for (auto i = rewardShowUpTime.begin(); i != rewardShowUpTime.end(); ++i)
-    {
-        RevRewardShowUpTime[i->second] = i->first;
-    }
-    //simulateRun
     outfile.close();
-
-    mean = sum/size;
     
+    mean = sum/size;
     double std = 0;
     for (int i = 0; i < size; ++i)
-    {
         std += (vals[i] - mean)*(vals[i] - mean);
-    }
+    
     std = std / size;
     std = sqrt(std);
+    
     Resultmean = mean;
     Resultstd = std;
     expectedVal = States.getUtility(4, 1);
@@ -96,6 +87,7 @@ void doProblem3(ofstream& out)
 {
     double minErr = 0.00001000;
     double Rs = -1.00000;
+    const int PROBLEM_3 = 3;
     int col = 3;
     int row = 3;
     map<string, int> policyMap;
@@ -113,7 +105,8 @@ void doProblem3(ofstream& out)
     gammaBinarySearch(0, 0.001, col, row, minErr, LowerBound,
                       Rs, LowerBoundpolicyCount, LowerBoundRsPolicyMap);
 
-    StatesMap lastStates = dpMDPsolver(Rs, col, row, minErr, LowerBound[0], 3);
+    StatesMap lastStates = dpMDPsolver(Rs, col, row, minErr,
+                                       LowerBound[0], PROBLEM_3);
     out << "Lower bound: (approximate 0) " << LowerBound[0] << endl;
     lastStates.printPolicyTofile(out);
     lastStates.printStatesToFile(out);
@@ -125,7 +118,8 @@ void doProblem3(ofstream& out)
                 else
             out << "Threshold value: " << DisList[i] << endl;
         
-        StatesMap states = dpMDPsolver(Rs, col, row, minErr, DisList[i], 3);
+        StatesMap states = dpMDPsolver(Rs, col, row, minErr,
+                                       DisList[i], PROBLEM_3);
         states.printPolicyTofile(out);
         states.printStatesToFile(out);
         lastStates = states;

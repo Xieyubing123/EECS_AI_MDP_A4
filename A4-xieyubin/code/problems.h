@@ -3,8 +3,6 @@
 #include <algorithm>
 #include <math.h>       /* sqrt */
 #include "helper.h"
-#include "StatesMap.h"
-#include "State.h"
 
 using namespace std;
 
