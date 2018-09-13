@@ -21,7 +21,7 @@ Expected utility for going left 0.655 * 0. 8 + 0.611 * 0. 1 + 0. 660 * 0.1 = 0.6
 Expected utility for going up 0.660 * 0.8 + 0.655 * 0.1 + 0.388 * 0.1 = 0. 6323
 Since the Expected value of going left (go to state (2, 1)) is higher than going up, this is why the optimal policy for R(s) = -0.04 say to move left from the state(3, 1).
 
-### output data:
+### output data (may differnt when run in different environment, this is data from cean environment):
 
 * Expected utility: 0.387925
 * First run: 0.4
