@@ -1,21 +1,20 @@
-#include<iostream>
-#include<vector>
-#include<map>
-#include "problems.cpp"
+#include "problems.h"
+#include "helper.h"
+#include "StatesMap.h"
+#include "State.h"
+
 using namespace std;
-
-
 
 int main(void)
 {
-    cout << "\n**********Problem 1**********\n\n" << endl;
-    //P1-output.txt
-    std::ofstream outfileP1 ("../generated/P1-output.txt");
+    cout << "\n**********Problem 1**********" << endl;
 
+    std::ofstream outfileP1 ("../generated/P1-output.txt");
     doProblem1(outfileP1);
-    
     outfileP1.close();
-    cout << "\n**********Problem 2**********\n\n" << endl;
+    cout << "\nProblem 1 done, result in ../generated/P1-output.txt\n\n" << endl;
+    
+    cout << "\n**********Problem 2**********" << endl;
     
     double mean10 = 0;
     double firstRun10 = 0;
@@ -34,7 +33,7 @@ int main(void)
     doProblem2(100, mean100, std100, exp100, temp);
     cout << "\n" << endl;
     doProblem2(1000, mean1000, std1000, exp1000, temp);
-    
+
     std::ofstream outfileP2 ("../generated/P2-output.txt");
     
     outfileP2 << "Expected utility: " << exp10 << endl;
@@ -46,12 +45,14 @@ int main(void)
     outfileP2 << "1000-run average utility: " << mean1000 << endl;
     outfileP2 << "1000-run standard dev: " << std1000 << endl;
     outfileP2.close();
-
+    cout << "\nProblem 2 done\n\n" << endl;
+    
     cout << "\n**********Problem 3**********\n\n" << endl;
     
     std::ofstream outP3 ("../generated/P3-output.txt");
     doProblem3(outP3);
     outP3.close();
+    cout << "\nProblem 3 done, result in ../generated/P3-output.txt\n\n" << endl;
 
     
 	return 0;

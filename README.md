@@ -39,5 +39,7 @@ quite far from the expected utility, however, when we have 100 run, the means ch
 
 ## compile:
 ```
-g++ main.cpp --std=c++11 -o main
+g++ -c main.cpp problems.cpp helper.cpp StatesMap.cpp  State.cpp --std=c++11
+g++ --std=c++11 main.o problems.o helper.o StatesMap.o State.o
+
 ```

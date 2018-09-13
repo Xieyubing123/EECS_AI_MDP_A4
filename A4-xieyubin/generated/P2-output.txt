@@ -1,8 +1,8 @@
 Expected utility: 0.387925
-First run: 0.4
-10-run average utility: 0.632
-10-run standard dev: 0.118389
-100-run average utility: 0.3064
-100-run standard dev: 0.672719
-1000-run average utility: 0.371
-1000-run standard dev: 0.601363
+First run: 0.68
+10-run average utility: 0.228
+10-run standard dev: 0.754517
+100-run average utility: 0.3992
+100-run standard dev: 0.578439
+1000-run average utility: 0.38884
+1000-run standard dev: 0.590817

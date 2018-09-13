@@ -1,11 +1,8 @@
-#include<iostream>
-#include<vector>
-#include<map>
-#include <cmath>        // std::abs
-#include "State.cpp"
+#include "helper.h"
 
 void initStatesUtility(StatesMap & states)
 {
+    //hardcode the textbook initial state 
     states.setWall(2, 2);
     states.setTerminal(4, 2, -1);
     states.setTerminal(4, 3, 1);
@@ -25,6 +22,7 @@ void initStatesUtility(StatesMap & states)
 
 void initP3StatesUtility(StatesMap & states, double r)
 {
+    //hardcode the textbook initial state 
     states.setTerminal(3, 3, 10);//set utitlity, col
     states.setUtility(1,1,0);
     states.setUtility(1,2,0);
@@ -49,14 +47,10 @@ double findBestExp(StatesMap &states, int col, int row, Action &bestAct)
 {
     vector<double> actExpects;
     map<double, int> actionMap;
-    //for each action
+
     for (int act = (int)UP; act <= (int)RIGHT; ++act)
     {
-        if (col == 3 && row == 2 && states.getUtility(3, 2) < -3.0389)
-        {
-            //states.printStates();
-            //cout << states.getUtility(3, 2) << endl;
-        }
+
         double actExpect = states.getResultStatesExpect(col,
                                                         row,
                                                         (Action)act,
@@ -65,7 +59,6 @@ double findBestExp(StatesMap &states, int col, int row, Action &bestAct)
                                                         0.1);
         actExpects.push_back(actExpect);
         actionMap[actExpect] = act;
-        //cout << "(" << col << "," << row << "," << act << "," << actExpect << ")" << endl;
     }
     
     sort(actExpects.begin(), actExpects.end());
@@ -96,9 +89,6 @@ void valueIteration(StatesMap &states, double Rs, double discountFactor,
                 double maxExp = findBestExp(states, i, j, tempAct);
                 double newUtility = states.getStateCostOfLiving(i, j)
                                     + discountFactor * maxExp;
-                ///cout << "(" << i << "," << j << ")" << "col: " << states.getStateCostOfLiving(i, j) << endl;
-                //states.printStates();
-                //cout << endl;
                 double change = abs(newUtility - states.getUtility(i, j));
                 
                 if (change > maxChange)
@@ -107,14 +97,9 @@ void valueIteration(StatesMap &states, double Rs, double discountFactor,
                 states.setUtility(i, j, newUtility);
             }
         }
-        
-        //states.printStates();
-
         if (maxChange < miniErr)
-        {
-            break;
-        }
-    }
+            break;   
+    }//while(true)
 }
 
 void findOptimalPolicy(StatesMap &states, int col, int row)
@@ -135,22 +120,15 @@ void findOptimalPolicy(StatesMap &states, int col, int row)
     }
 }
 
-StatesMap dynamicProgrammingMDPsolver(double Rs,int col,
-                                 int row, double minErr,
-                                 double discountFactor, int problemNum)
+//dynamicProgrammingMDPsolver
+StatesMap dpMDPsolver(double Rs,int col, int row, double minErr,
+                         double discountFactor, int problemNum)
 {
     StatesMap states = StatesMap(col, row, Rs);
     if (problemNum == 1 || problemNum == 2)
-    {
         initStatesUtility(states);
-    }
     else
-    {
         initP3StatesUtility(states, 3);
-        //states.printStates();
-        //states.printCOL();
-
-    }
     
     valueIteration(states, Rs, discountFactor,
                    minErr, col, row);
@@ -159,6 +137,7 @@ StatesMap dynamicProgrammingMDPsolver(double Rs,int col,
     return states;
 }
 
+//for solving problem 1 and 2
 void binarySearch(double minRs, double maxRs, int col,
                   int row, double minErr,
                   double discountFactor,
@@ -168,24 +147,20 @@ void binarySearch(double minRs, double maxRs, int col,
 {
     double err = 0.0000001;
     if (maxRs - minRs < err)
-    {
         return;
-    }
+
     string minPolStr = "";
     string maxPolStr = "";
     
-    
     StatesMap minState =
-    dynamicProgrammingMDPsolver(minRs, col, row, minErr, discountFactor, 1);
+    dpMDPsolver(minRs, col, row, minErr, discountFactor, 1);
     minPolStr = minState.makePlicyStr();
     RsPolicyMap[minRs] = minPolStr;
     
     StatesMap maxState =
-    dynamicProgrammingMDPsolver(maxRs, col, row, minErr, discountFactor, 1);
+    dpMDPsolver(maxRs, col, row, minErr, discountFactor, 1);
     maxPolStr = maxState.makePlicyStr();
     RsPolicyMap[maxRs] = maxPolStr;
-
-    
 
     if (minPolStr == maxPolStr)
     {
@@ -193,26 +168,16 @@ void binarySearch(double minRs, double maxRs, int col,
         {
             RsList.push_back(maxRs);
             policyCount[maxPolStr]++;
-        }
-        
-        
+        }        
     }
     else
     {
-        /*
-        if (policyCount[minPolStr] < 1)
-        {
-            RsList.push_back(minRs);
-            policyCount[minPolStr]++;
-        }
-        */
         
         if (policyCount[maxPolStr] < 1)
         {
             RsList.push_back(maxRs);
             policyCount[maxPolStr]++;
         }
-        
         
         binarySearch((maxRs + minRs)/2.0000000, maxRs - err, col,
                      row, minErr, discountFactor,
@@ -225,32 +190,29 @@ void binarySearch(double minRs, double maxRs, int col,
 
     }
     
-    //cout << RsList.size() << endl;
 }
 
+//for solving problem 3
 void gammaBinarySearch(double minDis, double maxDis, int col,
-                  int row, double minErr,
-                  vector<double> &DisList,
-                       double Rs,
-                  map<string, int>& policyCount,
-                  map<double, string>& RsPolicyMap)
+                        int row, double minErr, vector<double> &DisList,
+                        double Rs, map<string, int>& policyCount,
+                        map<double, string>& RsPolicyMap)
 {
     double err = minErr;
     if (maxDis - minDis < err)
-    {
         return;
-    }
+
     string minPolStr = "";
     string maxPolStr = "";
     
     
     StatesMap minState =
-    dynamicProgrammingMDPsolver(Rs, col, row, minErr, minDis, 3);
+    dpMDPsolver(Rs, col, row, minErr, minDis, 3);
     minPolStr = minState.makePlicyStr();
     RsPolicyMap[minDis] = minPolStr;
     
     StatesMap maxState =
-    dynamicProgrammingMDPsolver(Rs, col, row, minErr, maxDis, 3);
+    dpMDPsolver(Rs, col, row, minErr, maxDis, 3);
     maxPolStr = maxState.makePlicyStr();
     RsPolicyMap[maxDis] = maxPolStr;
     
@@ -263,25 +225,14 @@ void gammaBinarySearch(double minDis, double maxDis, int col,
             DisList.push_back(maxDis);
             policyCount[maxPolStr]++;
         }
-        
-        
     }
     else
-    {
-        /*
-         if (policyCount[minPolStr] < 1)
-         {
-         RsList.push_back(minRs);
-         policyCount[minPolStr]++;
-         }
-         */
-        
+    {   
         if (policyCount[maxPolStr] < 1)
         {
             DisList.push_back(maxDis);
             policyCount[maxPolStr]++;
         }
-        
         
         gammaBinarySearch((maxDis + minDis)/2.0000000, maxDis - err, col,
                      row, minErr,
@@ -289,17 +240,14 @@ void gammaBinarySearch(double minDis, double maxDis, int col,
         
         gammaBinarySearch(minDis + err, (maxDis + minDis)/2.0000000 , col,
                      row, minErr,
-                     DisList, Rs, policyCount,RsPolicyMap);
-        
-        
+                     DisList, Rs, policyCount,RsPolicyMap);        
     }
     
-    //cout << RsList.size() << endl;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////p2/////////////////
 
+//////////////////////////p2//////////////////////////////////////
+//genreate/simulate a rundom action 
 Action randomAct(Action act)
 {
     int v1 = rand() % 100 + 1;         // v1 in the range 1 to 100
@@ -308,20 +256,14 @@ Action randomAct(Action act)
     vector<Action> DownRan = {DOWN, RIGHT, LEFT};
     vector<Action> LeftRan = {LEFT, DOWN, UP};
     vector<Action> RightRan = {RIGHT, UP, DOWN};
-    
     vector<vector<Action>> randVec = {UpRan, DownRan, LeftRan, RightRan};
+
     if (v1 <= 80)
-    {
         return randVec[(int)act][0];
-    }
     else if (v1 <= 100 && v1 > 90)
-    {
         return randVec[(int)act][2];
-    }
     else
-    {
         return randVec[(int)act][1];
-    }
 }
 
 double simulateRun(StatesMap& states, int initX, int initY, double Rs)
@@ -329,8 +271,7 @@ double simulateRun(StatesMap& states, int initX, int initY, double Rs)
     int x = initX;
     int y = initY;
     double reward = 0;
-    //get
-    //nextState = states.getResultStates(x, y, randomAct())
+
     while (true)
     {
         Action bestAct = UP;

@@ -1,2 +1,4 @@
-/.DS_Store
+.DS_Store
 /A4-xieyubin/.DS_Store
+/A4-xieyubin/code/*.o
+/A4-xieyubin/code/*.out
